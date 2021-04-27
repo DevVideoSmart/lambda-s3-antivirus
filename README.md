@@ -110,7 +110,7 @@ Thanks for the Upside travel team who provided a good blueprint in Python.
 https://github.com/upsidetravel/bucket-antivirus-function/
 
 
-
+# VideoSmart
 # Deploy AV
 
 ## create lambda
@@ -165,12 +165,10 @@ https://database.clamav.net/bytecode.cvd
 }
 ```
 ## increase timeout -> 5m
-## set handler to antivirus.lambdaHandleEvent
+## set handler to download-definitions.lambdaHandleEvent
 ## set env variables
 
-## download virus definition - save same path as env variables above (only required before updater runs)
-https://database.clamav.net/main.cvd
-https://database.clamav.net/daily.cvd
-https://database.clamav.net/bytecode.cvd
-
 ## create cloudwatch crono 
+
+
+https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObjectTagging-property
