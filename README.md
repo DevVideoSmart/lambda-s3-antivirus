@@ -108,3 +108,69 @@ https://www.apache.org/licenses/LICENSE-2.0
 Thanks for the Upside travel team who provided a good blueprint in Python.
 
 https://github.com/upsidetravel/bucket-antivirus-function/
+
+
+
+# Deploy AV
+
+## create lambda
+## upload zip
+## inline policy to access s3
+```  
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::videosmart-sftp/*",
+                "arn:aws:s3:::videosmart-sftp",
+                "arn:aws:s3:::mbaaws-store/sftp-antivirus/*"
+            ]
+        }
+    ]
+}
+```
+## increase timeout -> 5m
+## set handler to antivirus.lambdaHandleEvent
+## set env variables
+
+## download virus definition - save same path as env variables above (only required before updater runs)
+https://database.clamav.net/main.cvd
+https://database.clamav.net/daily.cvd
+https://database.clamav.net/bytecode.cvd
+
+## create s3 trigger
+
+# Deploy Updater
+
+## create lambda
+## upload zip
+## inline policy to access s3
+```  
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::mbaaws-store/sftp-antivirus/*"
+            ]
+        }
+    ]
+}
+```
+## increase timeout -> 5m
+## set handler to antivirus.lambdaHandleEvent
+## set env variables
+
+## download virus definition - save same path as env variables above (only required before updater runs)
+https://database.clamav.net/main.cvd
+https://database.clamav.net/daily.cvd
+https://database.clamav.net/bytecode.cvd
+
+## create cloudwatch crono 

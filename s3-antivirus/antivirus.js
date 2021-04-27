@@ -63,10 +63,16 @@ function downloadFileFromS3(s3ObjectKey, s3ObjectBucket) {
 
 async function lambdaHandleEvent(event, context) {
 
-    let s3ObjectKey = utils.extractKeyFromS3Event(event);
+    let s3ObjectKey = decodeURI(utils.extractKeyFromS3Event(event));
     let s3ObjectBucket = utils.extractBucketFromS3Event(event);
 
     let virusScanStatus;
+
+    //ignore files that are not placed in a In/ folder
+    if(!s3ObjectKey.toLowerCase().includes("in/")){
+        console.log("File needs to be ignored.", s3ObjectKey);
+        return constants.STATUS_IGNORE_FILE;
+    }
 
     //You need to verify that you are not getting too large a file
     //currently lambdas max out at 500MB storage.
@@ -92,6 +98,10 @@ async function lambdaHandleEvent(event, context) {
     } catch(err) {
         console.log(err);
     } finally {
+        //validate file status. throw exception if scan status is not acceptable
+        if(virusScanStatus !== constants.STATUS_CLEAN_FILE){
+            throw new Error('File Status: '+ virusScanStatus);
+        }
         return virusScanStatus;
     }
 }
